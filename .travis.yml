@@ -12,15 +12,15 @@ language: java
 jdk:
   - openjdk7
 
-env:
-  matrix:
-    - DOCKER_VERSION=17.12.1~ce DOCKER_CE=1
-
 before_install:
   # check what version of docker is installed beforehand
   - dpkg -l | grep docker
   # install the version of docker in the DOCKER_VERSION env var
-  - ./.travis.sh install_docker
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce=17.12.1~ce-0~ubuntu
+  - docker swarm init
   # uncomment to double-check that the version/config is correct
   # - ./.travis.sh dump_docker_config
   - docker version
